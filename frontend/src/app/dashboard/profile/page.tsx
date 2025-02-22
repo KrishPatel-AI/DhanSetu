@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { Pencil, Save, User } from "lucide-react";
+import { Pencil, Save, User, LogOut } from "lucide-react";
 
 interface ProfileData {
   firstName: string;
@@ -31,7 +32,7 @@ const ProfilePage: React.FC = () => {
   const [profileData, setProfileData] = useState<ProfileData>({
     firstName: "",
     lastName: "",
-    email: "temp.account@test.com",
+    email: "",
     phone: "",
     mobile: "",
     dob: "",
@@ -44,6 +45,19 @@ const ProfilePage: React.FC = () => {
     bankAccount: "",
     ifscCode: "",
   });
+
+  const router = useRouter();
+
+  useEffect(() => {
+    // Load user data from localStorage (if logged in)
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setProfileData(JSON.parse(storedUser));
+    } else {
+      // Redirect to login if no user found
+      router.push("/login");
+    }
+  }, [router]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -60,25 +74,36 @@ const ProfilePage: React.FC = () => {
     setIsEditing(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("user"); // Clear user data
+    router.push("/"); // Redirect to home page
+  };
+
   return (
     <div className="py-8 px-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-semibold">My Profile</h1>
-        <Button
-          variant={isEditing ? "default" : "outline"}
-          onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
-          className="flex gap-2 items-center"
-        >
-          {isEditing ? (
-            <>
-              <Save className="h-4 w-4" /> Save Profile
-            </>
-          ) : (
-            <>
-              <Pencil className="h-4 w-4" /> Edit Profile
-            </>
-          )}
-        </Button>
+        <div className="flex gap-4">
+          <Button
+            variant={isEditing ? "default" : "outline"}
+            onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
+            className="flex gap-2 items-center"
+          >
+            {isEditing ? (
+              <>
+                <Save className="h-4 w-4" /> Save Profile
+              </>
+            ) : (
+              <>
+                <Pencil className="h-4 w-4" /> Edit Profile
+              </>
+            )}
+          </Button>
+          {/* Logout Button */}
+          <Button variant="destructive" onClick={handleLogout} className="flex gap-2 items-center">
+            <LogOut className="h-4 w-4" /> Logout
+          </Button>
+        </div>
       </div>
 
       <Card>

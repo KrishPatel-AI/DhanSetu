@@ -3,7 +3,8 @@
 import { MainSidebar } from "@/components/MainSidebar";
 
 import { Separator } from "@/components/ui/separator";
-
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   SidebarInset,
   SidebarProvider,
@@ -17,9 +18,28 @@ export default function Page({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const [user, setUser] = useState<any>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) {
+      router.push("/login");
+    } else {
+      setUser(JSON.parse(storedUser));
+    }
+  }, [router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    router.push("/login");
+  };
+
+  if (!user) return <p>Loading...</p>;
   return (
     <SidebarProvider>
-      <MainSidebar />
+      <MainSidebar/>
 
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
