@@ -30,6 +30,15 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model("User", userSchema);
 
+// ✅ Income Schema & Model (🚀 Added this)
+const incomeSchema = new mongoose.Schema({
+  title: String,
+  amount: Number,
+  category: String,
+  date: String,
+});
+const Income = mongoose.model("Income", incomeSchema);
+
 // ✅ Register Route
 app.post("/api/auth/register", async (req, res) => {
   const { name, email, password } = req.body;
@@ -62,6 +71,33 @@ app.post("/api/auth/login", async (req, res) => {
     res.json({ message: "Login successful", user: { name: user.name, email: user.email } });
   } catch (error) {
     res.status(500).json({ message: "Login failed" });
+  }
+});
+
+// ✅ Add Income (Fixed 🚀)
+app.post("/api/income", async (req, res) => {
+  try {
+    const { title, amount, category, date } = req.body;
+    if (!title || !amount || !category || !date) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    const newIncome = new Income({ title, amount, category, date });
+    await newIncome.save();
+    
+    res.status(201).json(newIncome);
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// ✅ Fetch Income Data (🚀 Added this)
+app.get("/api/income", async (req, res) => {
+  try {
+    const incomes = await Income.find();
+    res.json(incomes);
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
   }
 });
 
