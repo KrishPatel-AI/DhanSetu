@@ -49,12 +49,12 @@ const ProfilePage: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    // Load user data from localStorage (if logged in)
+   
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setProfileData(JSON.parse(storedUser));
     } else {
-      // Redirect to login if no user found
+      
       router.push("/login");
     }
   }, [router]);
@@ -75,8 +75,8 @@ const ProfilePage: React.FC = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("user"); // Clear user data
-    router.push("/"); // Redirect to home page
+    localStorage.removeItem("user"); 
+    router.push("/"); 
   };
 
   return (
