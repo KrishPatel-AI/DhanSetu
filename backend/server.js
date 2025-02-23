@@ -16,7 +16,11 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 
 // ✅ Middleware
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors({
+  origin: "*", // Allow all origins (for development)
+  methods: ["GET", "POST", "PUT", "DELETE"], // Allow common HTTP methods
+  allowedHeaders: ["Content-Type", "Authorization"] // Allow necessary headers
+}));
 
 // ✅ User Schema & Model
 const userSchema = new mongoose.Schema({

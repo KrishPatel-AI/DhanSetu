@@ -12,29 +12,28 @@ export default function Register() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-
+  
     try {
       const res = await fetch("http://localhost:5000/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ setName, email, password }),
       });
-
+  
       if (!res.ok) {
-        throw new Error("Registration failed");
+        const errorData = await res.json();
+        throw new Error(`Error ${res.status}: ${errorData.message}`);
       }
-
-      alert("Registration successful! Please log in.");
-      router.push("/login"); // Redirect to login page
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("An unknown error occurred");
-      }
+  
+      const data = await res.json();
+      console.log("Registration successful:", data);
+      router.push("/login");
+    } catch (err) {
+      console.error("Register Error:", err);
+      setError((err instanceof Error ? err.message : "Failed to register. Please try again."));
     }
   };
-
+  
   return (
     <div className="max-w-md mx-auto mt-10 p-4 border rounded-lg">
       <h2 className="text-2xl font-bold mb-4">Register</h2>
