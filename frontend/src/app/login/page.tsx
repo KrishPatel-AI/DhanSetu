@@ -50,7 +50,7 @@ export default function Login() {
 
       {/* ✅ Message & Register Link */}
       <p className="mt-4 text-center">
-        Do not have an account?{" "}
+        Don't have an account?{" "}
         <Link href="/register" className="text-blue-500 hover:underline">
           Register here
         </Link>
