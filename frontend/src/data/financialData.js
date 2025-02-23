@@ -1,4 +1,3 @@
-// financialData.js - Externalized Demo Data
 
 export const demoData = {
     day: {

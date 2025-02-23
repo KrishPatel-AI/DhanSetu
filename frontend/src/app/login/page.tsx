@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link"; // ✅ Import Link for navigation
+import Link from "next/link";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -23,10 +23,10 @@ export default function Login() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
 
-      // ✅ Store user in localStorage
+    
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      // ✅ Redirect to dashboard
+   
       router.push("/dashboard");
     } catch (err: unknown) {
       if (err instanceof Error) {

@@ -13,7 +13,7 @@ export function Navbar() {
           {/* <Image src={Logo} alt="Wealth Radar Logo" className="w-8 h-8" /> */}
 
           <span className="text-xl font-bold text-foreground">
-           Fin AI
+           Dhan Setu
           </span>
         </div>
 
